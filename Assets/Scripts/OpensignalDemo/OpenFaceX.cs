@@ -10,7 +10,7 @@ using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 // connect with ZeroMQ
-public class OpenFaceAnimatorListener {
+public class OpenFaceListener {
     public string sub_to_ip;
     public string sub_to_port;
     private readonly Thread _listenerWorker;
@@ -22,11 +22,8 @@ public class OpenFaceAnimatorListener {
     private string csv_path = "Assets/Logging/unity_timestamps_sub.csv";
     private StreamWriter csv_writer;
     private long msg_count;
-    public OpenFaceAnimatorListener (string sub_to_ip, string sub_to_port) {
-        this.sub_to_ip = sub_to_ip;
-        this.sub_to_port = sub_to_port;
-    }
-
+    
+    //Listen to msg
     private void ListenerWork () {
         Debug.Log ("Setting up subscriber sock");
         AsyncIO.ForceDotNet.Force ();
@@ -47,25 +44,11 @@ public class OpenFaceAnimatorListener {
             //string head_pose;
             string facsvatar_json;
             while (!_listenerCancelled) {
-                //string frameString;
                 // wait for full message
-                //if (!subSocket.TryReceiveFrameString(out frameString)) continue;
-                //Debug.Log(frameString);
-                //_messageQueue.Enqueue(frameString);
-
                 List<string> msg_list = new List<string> ();
                 if (!subSocket.TryReceiveFrameString (out topic)) continue;
-                //if (!subSocket.TryReceiveFrameString(out frame)) continue;
                 if (!subSocket.TryReceiveFrameString (out timestamp)) continue;
-                //if (!subSocket.TryReceiveFrameString(out blend_shapes)) continue;
-                //if (!subSocket.TryReceiveFrameString(out head_pose)) continue;
                 if (!subSocket.TryReceiveFrameString (out facsvatar_json)) continue;
-
-                //Debug.Log("Received messages:");
-                //Debug.Log(frame);
-                //Debug.Log(timestamp);
-                //Debug.Log(facsvatar_json);
-
                 // check if we're not done; timestamp is empty
                 if (timestamp != "") {
                     msg_list.Add (topic);
@@ -73,9 +56,7 @@ public class OpenFaceAnimatorListener {
                     msg_list.Add (facsvatar_json);
                     long timeNowMs = UnixTimeNowMillisec ();
                     msg_list.Add (timeNowMs.ToString ()); // time msg received; for unity performance
-
                     msg_count++;
-
                     _messageQueue.Enqueue (msg_list);
                 }
                 // done
@@ -96,7 +77,7 @@ public class OpenFaceAnimatorListener {
         return timeNowMs;
     }
 
-    // check queue for messages
+    // check queue for messages and send it to main thread
     public void Update () {
         while (!_messageQueue.IsEmpty) {
             List<string> msg_list;
@@ -109,7 +90,7 @@ public class OpenFaceAnimatorListener {
     }
 
     // threaded message listener
-    public OpenFaceAnimatorListener (MessageDelegate messageDelegate) {
+    public OpenFaceListener (MessageDelegate messageDelegate) {
         _messageDelegate = messageDelegate;
         _listenerWorker = new Thread (ListenerWork);
     }
@@ -128,8 +109,8 @@ public class OpenFaceAnimatorListener {
 }
 
 // act on messages received
-public class OpenFaceAnimator : MonoBehaviour {
-    private OpenFaceAnimatorListener oFListener;
+public class OpenFaceX : MonoBehaviour {
+    private OpenFaceListener oFListener;
     public string sub_to_ip = "127.0.0.1";
     public string sub_to_port = "5572";
 
@@ -140,32 +121,22 @@ public class OpenFaceAnimator : MonoBehaviour {
     private StreamWriter csv_writer;
     private string csv_path_total = "Assets/Logging/unity_timestamps_total.csv";
     private StreamWriter csv_writer_total;
-
-    public ActionUnitAnimator actionUnitAnimator;
-
+    
     // Receive data from FACSvatar/OpenFace.
     private void HandleMessage (List<string> msg_list) {
-
-        JObject facsvatar = JObject.Parse (msg_list[2]);
+        // TODO Check what is in  msgList
+        //JObject facsvatar = JObject.Parse (msg_list[2]);
         // Action Unit Data
-        JObject blend_shapes = facsvatar["au_r"].ToObject<JObject> ();
+        //JObject blend_shapes = facsvatar["au_r"].ToObject<JObject> ();
 
-        UnityMainThreadDispatcher.Instance ().Enqueue (actionUnitAnimator.RequestBlendshapes (blend_shapes));
+        //UnityMainThreadDispatcher.Instance ().Enqueue (actionUnitAnimator.RequestBlendshapes (blend_shapes));
 
-        msg_count++;
+        //msg_count++;
     }
-
-    public static long UnixTimeNowMillisec () {
-        DateTime unixStart = new DateTime (1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
-        long unixTimeStampInTicks = (DateTime.UtcNow - unixStart).Ticks;
-        long timeNowMs = unixTimeStampInTicks / (TimeSpan.TicksPerMillisecond / 10000); // 100ns
-        //Debug.Log(timeNowMs);
-        return timeNowMs;
-    }
-
+    
     private void Start () {
 
-        oFListener = new OpenFaceAnimatorListener (HandleMessage);
+        oFListener = new OpenFaceListener (HandleMessage);
         oFListener.sub_to_ip = sub_to_ip;
         oFListener.sub_to_port = sub_to_port;
         oFListener.Start ();
