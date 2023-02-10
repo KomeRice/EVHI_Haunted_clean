@@ -435,6 +435,7 @@ GameObject:
   - component: {fileID: 7041592009414768257}
   - component: {fileID: 688298557114567414}
   - component: {fileID: 3725003373199325021}
+  - component: {fileID: 665881251201060592}
   - component: {fileID: 7905995359842681207}
   m_Layer: 0
   m_Name: Door
@@ -452,7 +453,7 @@ Transform:
   m_GameObject: {fileID: 8564569542763260507}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 7.6, y: 0, z: 0}
-  m_LocalScale: {x: 14.75, y: 1, z: 0.5}
+  m_LocalScale: {x: 15, y: 1, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3996446428235997060}
@@ -517,10 +518,23 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8564569542763260507}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &665881251201060592
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8564569542763260507}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1.0000001, z: 1.0000001}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7905995359842681207
 MonoBehaviour:
