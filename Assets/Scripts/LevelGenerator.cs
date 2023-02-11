@@ -21,7 +21,7 @@ public class LevelGenerator : MonoBehaviour
         var curRoom = _gameData.currentRoom.GetComponent<BaseRoomBehaviour>();
         // TODO: Prevent rooms from generating in one another
         
-        if (Input.GetKeyDown(KeyCode.P) && !curRoom.doorInFilled)
+        if (Input.GetKeyDown(KeyCode.P) && !curRoom.doorOutFilled)
         {
             if (curRoom.eligibleNextRooms.Count == 0)
             {
