@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -38,7 +38,10 @@ public class CaptorSystem : MonoBehaviour
     private int CardioBanPID = 2050;
     private int BiosignalspluxSoloPID = 532;
     private int MaxLedIntensity = 255;
-    
+
+    private List<int> datas = new List<int>();
+
+    private int heartrate = -1;
     // Start is called before the first frame update
     void Start()
     {
@@ -338,16 +341,18 @@ public class CaptorSystem : MonoBehaviour
     // data -> Package of data containing the RAW data samples collected from each active channel ([sample_first_active_channel, sample_second_active_channel,...]).
     public void OnDataReceived(int nSeq, int[] data)
     {
+        datas.Add(data[0]);
+        if (datas.Count == 200) //2seconds
+        {
+            heartrate = detectHR(datas);
+            datas.Clear();
+        }
         // Show samples with a 1s interval.
         if (nSeq % samplingRate == 0)
         {
             // Show the current package of data.
-            string outputString = "Acquired Data:\n";
-            for (int j = 0; j < data.Length; j++)
-            {
-                outputString += data[j] + "\t";
-            }
-
+            string outputString = "Acquired Data:\n" + heartrate;
+            //data size = 2  form = pulse int so take data[0]
             // Show the values in the GUI.
             OutputMsgText.text = outputString;
         }
@@ -396,5 +401,53 @@ public class CaptorSystem : MonoBehaviour
         ResolutionDropdown.interactable = false;
         RedIntensityDropdown.interactable = false;
         InfraredIntensityDropdown.interactable = false;
+    }
+
+    public int detectHR(List<int> data)
+    {
+        int[] f = FilterECG(data.ToArray());
+        int[] rPeaks = DetectRPeaks(f).ToArray();
+
+        double[] rPeakIntervals = new double[rPeaks.Length - 1];
+        for (int i = 0; i < rPeaks.Length - 1; i++)
+        {
+            rPeakIntervals[i] = rPeaks[i + 1] - rPeaks[i];
+        }
+        double averageInterval = rPeakIntervals.Average();
+        double heartRate = 60.0 / (averageInterval / samplingRate);
+        return (int)heartRate;
+    }
+    
+    static int[] FilterECG(int[] ecgData)
+    {
+        int[] filteredData = new int[ecgData.Length];
+        for (int i = 0; i < ecgData.Length; i++)
+        {
+            int value = ecgData[i] - 500;
+            if (value > -20 && value < 20)
+            {
+                filteredData[i] = 0;
+            }
+            else
+            {
+                filteredData[i] = value;
+            }
+        }
+        return filteredData;
+    }
+
+    
+    static List<int> DetectRPeaks(int[] filteredData)
+    {
+        List<int> rPeaks = new List<int>();
+        for (int i = 0; i < filteredData.Length-1; i++)
+        {
+            if (filteredData[i] == 0 && filteredData[i + 1] > 20)
+            {
+                rPeaks.Add(i);
+            } 
+        }
+
+        return rPeaks;
     }
 }
