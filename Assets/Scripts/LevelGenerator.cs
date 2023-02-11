@@ -2,17 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = System.Random;
 
 public class LevelGenerator : MonoBehaviour
 {
     private GameObject _environment;
     private GameData _gameData;
+    private Random _rng;
     
     // Start is called before the first frame update
     void Start()
     {
         _environment = GameObject.Find("Environment");
         _gameData = GetComponent<GameData>();
+        _rng = new Random();
     }
 
     // Update is called once per frame
@@ -29,7 +32,8 @@ public class LevelGenerator : MonoBehaviour
                 return;
             }
 
-            var obj = Instantiate(curRoom.eligibleNextRooms.First(), new Vector3(0f, -10f, 0f), 
+            var choice = _rng.Next(curRoom.eligibleNextRooms.Count);
+            var obj = Instantiate(curRoom.eligibleNextRooms[choice], new Vector3(0f, -10f, 0f), 
                 new Quaternion(0.0f, 0.0f, 0.0f, 0.0f), _environment.transform);
             var newRoom = obj.GetComponent<BaseRoomBehaviour>();
             var otherDoor = newRoom.doorIn.GetComponent<DoorBehavior>();
