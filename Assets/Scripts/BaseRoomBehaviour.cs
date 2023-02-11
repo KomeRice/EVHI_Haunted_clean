@@ -5,16 +5,16 @@ using UnityEngine.Serialization;
 
 public class BaseRoomBehaviour : MonoBehaviour
 {
+    public List<GameObject> eligibleNextRooms = new List<GameObject>();
+    
     [FormerlySerializedAs("door1")] public GameObject doorIn;
     public bool doorInFilled;
     [FormerlySerializedAs("door2")] public GameObject doorOut;
     public bool doorOutFilled;
-    public GameObject room;
 
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("a");
     }
     
     // Update is called once per frame

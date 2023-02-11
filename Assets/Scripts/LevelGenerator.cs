@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour
 {
-    public List<GameObject> generableRooms = new List<GameObject>();
-
+    private GameObject _environment;
+    
     // Start is called before the first frame update
     void Start()
     {
-        
+        _environment = GameObject.Find("Environment");
     }
 
     // Update is called once per frame
@@ -21,9 +21,14 @@ public class LevelGenerator : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.P) && !curRoom.doorInFilled)
         {
-            Debug.Log("AA");
-            var obj = GameObject.Instantiate(generableRooms.First(), new Vector3(0f, -10f, 0f), 
-                new Quaternion(0.0f, 0.0f, 0.0f, 0.0f));
+            if (curRoom.eligibleNextRooms.Count == 0)
+            {
+                Debug.Log("No eligible next room found");
+                return;
+            }
+
+            var obj = Instantiate(curRoom.eligibleNextRooms.First(), new Vector3(0f, -10f, 0f), 
+                new Quaternion(0.0f, 0.0f, 0.0f, 0.0f), _environment.transform);
             var otherDoor = obj.GetComponent<BaseRoomBehaviour>().doorOut.GetComponent<DoorBehavior>();
             var thisDoor = curRoom.doorIn.GetComponent<DoorBehavior>();
             var otherRot = otherDoor.doorOrientation;
