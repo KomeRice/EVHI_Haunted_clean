@@ -15,11 +15,13 @@ public class DoorBehavior : MonoBehaviour
     private bool _isOpening = false;
     private bool _isOpen = false;
     private GameObject _player;
+    private Renderer _renderer;
     
     // Start is called before the first frame update
     void Start()
     {
         _player = GameObject.FindWithTag("Player");
+        _renderer = GetComponent<Renderer>();
     }
 
     private void Update()
@@ -27,7 +29,7 @@ public class DoorBehavior : MonoBehaviour
         if (Math.Abs(_curAngle) >= _maxAngle)
             _isOpen = true;
         
-        if (_isOpening && (_isOpen || Input.GetKeyUp(KeyCode.E) || !GetComponent<Renderer>().isVisible))
+        if (_isOpening && (_isOpen || Input.GetKeyUp(KeyCode.E) || !_renderer.isVisible))
         {
             _isOpening = false;
         }

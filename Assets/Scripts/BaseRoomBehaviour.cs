@@ -25,7 +25,6 @@ public class BaseRoomBehaviour : MonoBehaviour
 
     public void RotateRoom(DoorBehavior.Orientation orientation)
     {
-        Debug.Log($"Rotating by {orientation}");
         var d1 = doorIn.GetComponent<DoorBehavior>();
         var d2 = doorOut.GetComponent<DoorBehavior>();
         d1.doorOrientation = (DoorBehavior.Orientation) (((int) d1.doorOrientation + (int) orientation) % 360);

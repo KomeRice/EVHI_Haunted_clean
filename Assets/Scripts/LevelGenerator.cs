@@ -6,17 +6,19 @@ using UnityEngine;
 public class LevelGenerator : MonoBehaviour
 {
     private GameObject _environment;
+    private GameData _gameData;
     
     // Start is called before the first frame update
     void Start()
     {
         _environment = GameObject.Find("Environment");
+        _gameData = GetComponent<GameData>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        var curRoom = GetComponent<GameData>().currentRoom.GetComponent<BaseRoomBehaviour>();
+        var curRoom = _gameData.currentRoom.GetComponent<BaseRoomBehaviour>();
         // TODO: Prevent rooms from generating in one another
         
         if (Input.GetKeyDown(KeyCode.P) && !curRoom.doorInFilled)
