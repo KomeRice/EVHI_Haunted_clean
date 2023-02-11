@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class DoorBehavior : MonoBehaviour
 {
+    public Orientation doorOrientation;
+    
     private float _doorOpenSpeed = -1.5f;
     private float _maxAngle = 100.0f;
     private float _curAngle = 0.0f;
@@ -48,8 +50,26 @@ public class DoorBehavior : MonoBehaviour
         }
     }
 
+    public Transform GetAnchor()
+    {
+        return transform.GetChild(1);
+    }
+
+    public void DisableDoor()
+    {
+        this.gameObject.SetActive(false);
+    }
+
     private bool PlayerInRange()
     {
         return Vector3.Distance(transform.position, _player.transform.position) < _maxInteractionDistance;
+    }
+
+    public enum Orientation
+    {
+        North = 0,
+        East = 90,
+        South = 180,
+        West = 270
     }
 }
