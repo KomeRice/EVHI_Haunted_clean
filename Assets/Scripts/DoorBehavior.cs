@@ -87,7 +87,7 @@ public class DoorBehavior : MonoBehaviour
                 yield break;
             }
             
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForFixedUpdate();
         }
     }
 
