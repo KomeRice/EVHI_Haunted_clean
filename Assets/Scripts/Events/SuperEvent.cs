@@ -1,0 +1,33 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public abstract class SuperEvent : GameEvent
+{
+    private GameData _gameData;
+
+    private void Start()
+    {
+		InitEvent();
+        _gameData = GameObject.Find("GameManager").GetComponent<GameData>();
+    }
+    
+    public override void Trigger()
+    {
+        TriggerClass(PickClass());
+        _gameData.eventListRefresh = true;
+    }
+
+    /// <summary>
+    /// Triggers an event according to the given class which is picked by SuperEvent.PickClass which is called by GameEvent.Trigger()
+    /// </summary>
+    /// <param name="c">Event class to trigger</param>
+    protected abstract void TriggerClass(EventClass c);
+
+    /// <summary>
+    /// Picks the class of event to play according to external parameters
+    /// </summary>
+    /// <returns>Class of event to be played</returns>
+    protected abstract EventClass PickClass();
+}
