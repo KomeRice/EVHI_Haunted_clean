@@ -6,7 +6,6 @@ using UnityEngine;
 public class FloorDetectorBehaviour : MonoBehaviour
 {
     private GameData _gameManager;
-    private bool _setPlayerLast = false;
     
     // Start is called before the first frame update
     void Start()
@@ -14,22 +13,33 @@ public class FloorDetectorBehaviour : MonoBehaviour
         _gameManager = GameObject.Find("GameManager").GetComponent<GameData>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Player") || _setPlayerLast) return;
-        _setPlayerLast = true;
-        _gameManager.currentRoom = transform.parent.parent.gameObject;
-        _gameManager.eventListRefresh = true;
+        if (other.CompareTag("Player"))
+        {
+            if (_gameManager.currentRoom == transform.parent.parent.gameObject)
+            {
+                _gameManager.exitedCurrentRoom = false;
+            }
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (_gameManager.exitedCurrentRoom && other.CompareTag("Player") &&
+            _gameManager.currentRoom != transform.parent.parent.gameObject)
+        {
+            Debug.Log("Updating");
+            _gameManager.prevRoom = _gameManager.currentRoom;
+            _gameManager.currentRoom = transform.parent.parent.gameObject;
+            _gameManager.eventListRefresh = true;
+            _gameManager.exitedCurrentRoom = false;
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        _setPlayerLast = false;
+        if (_gameManager.currentRoom == transform.parent.parent.gameObject)
+            _gameManager.exitedCurrentRoom = true;
     }
 }

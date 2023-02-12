@@ -11,9 +11,12 @@ public class DoorBehavior : MonoBehaviour
     private float _maxAngle = 100.0f;
     private float _curAngle = 0.0f;
     private float _maxInteractionDistance = 3.0f;
+    public bool interactable = true;
 
     private bool _isOpening = false;
     private bool _isOpen = false;
+    public bool isClosed = true;
+    private bool _isClosing = false;
     private GameObject _player;
     private Renderer _renderer;
     private AudioSource _audioSource;
@@ -28,6 +31,14 @@ public class DoorBehavior : MonoBehaviour
 
     private void Update()
     {
+        
+        //TODO: Remove debug branch
+        if (Input.GetKeyDown(KeyCode.C) && !isClosed)
+        {
+            Debug.Log("Closing door");
+            StartCoroutine(CloseDoor(1.5f));
+        }
+        
         if (Math.Abs(_curAngle) >= _maxAngle)
             _isOpen = true;
         
@@ -52,10 +63,31 @@ public class DoorBehavior : MonoBehaviour
 
     void OnMouseOver()
     {
-        if (Input.GetKeyDown(KeyCode.E) && PlayerInRange())
+        if (interactable && Input.GetKeyDown(KeyCode.E) && PlayerInRange())
         {
+            isClosed = false;
             _isOpening = true;
             _audioSource.Play();
+        }
+    }
+
+    public IEnumerator CloseDoor(float closeSpeed)
+    {
+        _isOpen = false;
+        _isClosing = true;
+        while (!isClosed)
+        {
+            transform.RotateAround(transform.parent.position, Vector3.up, closeSpeed);
+            _curAngle += closeSpeed;
+            if (_curAngle >= 0)
+            {
+                _curAngle = 0;
+                isClosed = true;
+                _isClosing = false;
+                yield break;
+            }
+            
+            yield return new WaitForEndOfFrame();
         }
     }
 
@@ -72,6 +104,11 @@ public class DoorBehavior : MonoBehaviour
     private bool PlayerInRange()
     {
         return Vector3.Distance(transform.position, _player.transform.position) < _maxInteractionDistance;
+    }
+
+    public void SetInteractable(bool newState)
+    {
+        interactable = newState;
     }
 
     public enum Orientation

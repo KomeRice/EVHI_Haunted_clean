@@ -16,12 +16,6 @@ public class SuperSpookyPaintingEvent : SuperEvent
         EventObjects = CheckForObjects();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public override bool CheckPrecondition()
     {
         return EventObjects != null && Properties.EventTriggerAmount > 0;
