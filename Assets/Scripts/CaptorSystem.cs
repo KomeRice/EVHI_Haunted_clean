@@ -68,7 +68,7 @@ public class CaptorSystem : MonoBehaviour
                 Console.WriteLine("Application ending after " + Time.time + " seconds");
             }
         }
-        catch (Exception exc)
+        catch (Exception)
         {
             Console.WriteLine("Device already disconnected when the Application Quit.");
         }

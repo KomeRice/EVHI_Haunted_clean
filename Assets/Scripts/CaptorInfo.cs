@@ -3,13 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.UI;
 public class CaptorInfo : MonoBehaviour
 {
-    private string MAC_ADDRESS = "20:18:08:08:02:30";
     public int sampling_rate = 100;
+    public Text outPutText;
     private PluxDeviceManager pluxDevManager;
     private List<int> collected_data = new List<int>();
-
+    
+    
+    [System.NonSerialized]
+    public List<string> domains = new List<string>() { "BTH" };
+    
     private int heartrate;
     // Start is called before the first frame update
     void Start()
@@ -18,6 +23,8 @@ public class CaptorInfo : MonoBehaviour
 
         // Important call for debug purposes by creating a log file in the root directory of the project.
         pluxDevManager.WelcomeFunctionUnity();
+        
+        Scan();
         
     }
 
@@ -42,20 +49,25 @@ public class CaptorInfo : MonoBehaviour
                 Console.WriteLine("Application ending after " + Time.time + " seconds");
             }
         }
-        catch (Exception exc)
+        catch (Exception)
         {
             Console.WriteLine("Device already disconnected when the Application Quit.");
         }
     }
 
-    private void Connect()
+    private void Connect(string macAdress)
     {
-        pluxDevManager.PluxDev(MAC_ADDRESS);
+        pluxDevManager.PluxDev(macAdress);
     }
 
     private void Disconnect()
     {
         pluxDevManager.DisconnectPluxDev();
+    }
+
+    private void Scan()
+    {
+        pluxDevManager.GetDetectableDevicesUnity(domains);
     }
     
     private void StartAq()
@@ -75,12 +87,13 @@ public class CaptorInfo : MonoBehaviour
         
         if (listDevices.Count > 0)
         {
-            Debug.Log("Scan completed.\nNumber of devices found: " + listDevices.Count);
+            outPutText.text = "Device found";
+            Connect(listDevices[0]);
         }
         else
         {
-            // Show an informative message stating the none devices were found.
-            Debug.Log("Bluetooth device scan didn't found any valid devices.");
+            outPutText.text = "no device found";
+            Scan();
         }
     }
     
@@ -90,11 +103,13 @@ public class CaptorInfo : MonoBehaviour
     {
         if (connectionStatus)
         {
-            Debug.Log("Connection sucessful.");
+            outPutText.text = "Connected";
+            StartAq();
         }
         else
         {
-            Debug.Log("It was not possible to establish a connection with the device.");
+            outPutText.text = "Error on connection";
+            Scan();//Keep watch not infinite loop
         }
     }
     
@@ -108,7 +123,8 @@ public class CaptorInfo : MonoBehaviour
         else
         {
             // Present an informative message about the error.
-            Debug.Log("It was not possible to start a real-time data acquisition. Try to repeat the scan/connect/start workflow.");
+            outPutText.text = "Aquisition failed";
+            Scan();
         }
     }
     
@@ -120,7 +136,7 @@ public class CaptorInfo : MonoBehaviour
         if (pluxDevManager.IsAcquisitionInProgress())
         {
             // Present an informative message about the error.
-            Debug.Log(exceptionDescription);
+            outPutText.text = "Error";
         }
     }
     
@@ -132,14 +148,13 @@ public class CaptorInfo : MonoBehaviour
         collected_data.Add(data[0]);
         if (collected_data.Count == 200) //2seconds
             {
-                heartrate = detectHR(collected_data);
+                detectHR(collected_data);
                 collected_data.Clear();
             }
 
         if (nSeq % sampling_rate == 0)
         {
-            string outputString = heartrate.ToString();
-            //TODO put the heartbeat in a gameobject 
+            outPutText.text = heartrate.ToString();
         }
     }
     
@@ -149,13 +164,9 @@ public class CaptorInfo : MonoBehaviour
     {
         if (pluxEvent is PluxDeviceManager.PluxDisconnectEvent)
         {
-            // Present an error message.
-            Debug.Log(
-                "The connection between the computer and the PLUX device was interrupted due to the following event: " +
-                (pluxEvent as PluxDeviceManager.PluxDisconnectEvent).reason);
-
             // Securely stop the real-time acquisition.
             pluxDevManager.StopAcquisitionUnity(-1);
+            Scan();
         }
         else if (pluxEvent is PluxDeviceManager.PluxDigInUpdateEvent)
         {
@@ -164,19 +175,20 @@ public class CaptorInfo : MonoBehaviour
         }
     }
     
-    private int detectHR(List<int> data)
+    private void detectHR(List<int> data)
     {
         int[] f = FilterECG(data.ToArray());
         int[] rPeaks = DetectRPeaks(f).ToArray();
-
+        if (rPeaks.Length <= 2) return;
         double[] rPeakIntervals = new double[rPeaks.Length - 1];
         for (int i = 0; i < rPeaks.Length - 1; i++)
         {
             rPeakIntervals[i] = rPeaks[i + 1] - rPeaks[i];
         }
+
         double averageInterval = rPeakIntervals.Average();
-        double heartRate = 60.0 / (averageInterval / sampling_rate);
-        return (int)heartRate;
+        double hRa = 60.0 / (averageInterval / sampling_rate);
+        heartrate = (int)hRa;
     }
     
     static int[] FilterECG(int[] ecgData)
