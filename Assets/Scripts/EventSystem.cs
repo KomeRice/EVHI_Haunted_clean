@@ -32,12 +32,12 @@ public class EventSystem : MonoBehaviour
             {
                 if (e.CheckPrecondition())
                 {
-                    Debug.Log($"Playing {e.EventName} (Class: {e.EventClass})");
+                    Debug.Log($"Playing {e.Properties.EventName} (Class: {e.Properties.EventClass})");
                     e.Trigger();
                 }
                 else
                 {
-                    Debug.Log($"Preconditions not met for playing event {e.EventName}");
+                    Debug.Log($"Preconditions not met for playing event {e.Properties.EventName}");
                 }
             }
         }

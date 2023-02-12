@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,13 +6,11 @@ using UnityEngine.Rendering.Universal;
 
 public class StarterRoomTurnOffLightEvent : GameEvent
 {
-    // Start is called before the first frame update
-    void Start()
+    protected override void InitEvent()
     {
-        EventName = "DebugTurnOffLampStarterEvent";
-        EventClass = EventClass.Ambient;
-        RequiredObjectNames.Add("torchere_1");
-        EventTriggerAmount = 1;
+        Properties = new EventProperties("DebugTurnOffLampStarterEvent", EventClass.Ambient,
+            new List<string> { "torchere_1" }, 1);
+        
         EventObjects = CheckForObjects();
     }
 
@@ -23,12 +22,12 @@ public class StarterRoomTurnOffLightEvent : GameEvent
 
     public override bool CheckPrecondition()
     {
-        return EventTriggerAmount > 0 && EventObjects != null && EventObjects["torchere_1"].GetComponentInChildren<UniversalAdditionalLightData>() != null;
+        return Properties.EventTriggerAmount > 0 && EventObjects != null && EventObjects["torchere_1"].GetComponentInChildren<UniversalAdditionalLightData>() != null;
     }
 
     public override void Trigger()
     {
         EventObjects["torchere_1"].GetComponentInChildren<Light>().enabled = false;
-        EventTriggerAmount -= 1;
+        Properties.EventTriggerAmount -= 1;
     }
 }
