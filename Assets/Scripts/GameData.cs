@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameData : MonoBehaviour
 {
     public GameObject currentRoom;
+    public bool eventListRefresh = false;
     
     // Start is called before the first frame update
     void Start()
