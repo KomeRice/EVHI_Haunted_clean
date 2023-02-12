@@ -16,12 +16,14 @@ public class DoorBehavior : MonoBehaviour
     private bool _isOpen = false;
     private GameObject _player;
     private Renderer _renderer;
+    private AudioSource _audioSource;
     
     // Start is called before the first frame update
     void Start()
     {
         _player = GameObject.FindWithTag("Player");
         _renderer = GetComponent<Renderer>();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -31,6 +33,10 @@ public class DoorBehavior : MonoBehaviour
         
         if (_isOpening && (_isOpen || Input.GetKeyUp(KeyCode.E) || !_renderer.isVisible))
         {
+            if (_audioSource.isPlaying)
+            {
+                _audioSource.Stop();
+            }
             _isOpening = false;
         }
     }
@@ -49,6 +55,7 @@ public class DoorBehavior : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) && PlayerInRange())
         {
             _isOpening = true;
+            _audioSource.Play();
         }
     }
 
