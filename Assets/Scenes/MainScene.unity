@@ -455,8 +455,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d799c5deee23046638dd83c80acac9df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  generableRooms:
-  - {fileID: 3691658414877764757, guid: d7a300c105d82624d993999922830c3c, type: 3}
 --- !u!114 &1384838356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -470,6 +468,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentRoom: {fileID: 0}
+  eventListRefresh: 0
+--- !u!114 &1384838357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1384838353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e5ed69f6c7ba3f4b881ccd509273493, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1455257375 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4135013735270702856, guid: c5efc39a8aaf6e64ea40e9ad573e9b47,
