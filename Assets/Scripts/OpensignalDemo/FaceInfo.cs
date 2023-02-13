@@ -87,13 +87,14 @@ public class FaceInfo : MonoBehaviour
             // ignored
         }
 
-        outPutMsg.text = y > 0 ? "Fear" : "Neutral";
+        outPutMsg.text = y < 0 ? "Fear" : "Neutral";
     }
 
     private void OnApplicationQuit()
     {
         _reader.Dispose();
     }
+   
     private int Predict(double[] X)
     {
         double y = 0;
