@@ -19,6 +19,8 @@ public class GameData : MonoBehaviour
     [NonSerialized] 
     public FaceState face;
 
+    public HeartState heartState = HeartState.Regular;
+
     private bool _measuringBaseline = false;
     public int heartrateBaseline = -1;
     private readonly Dictionary<int, int> _measures = new Dictionary<int, int>();
@@ -28,6 +30,21 @@ public class GameData : MonoBehaviour
     {
         heartrate = heartListener.heartrate;
         face = faceListener.outPutMsg.text == "Fear" ? FaceState.Fear : FaceState.Neutral;
+
+        if (heartrateBaseline != -1 && !_measuringBaseline)
+        {
+            if (heartrate > 120)
+                return;
+
+            var diff = heartrate - heartrateBaseline;
+
+            if (diff > 0)
+                heartState = HeartState.Regular;
+            if (diff > 10)
+                heartState = HeartState.Heightened;
+            if (diff > 20)
+                heartState = HeartState.Dead;
+        }
 
         if (heartrate != 0 && heartrateBaseline == -1 && !_measuringBaseline)
         {
@@ -61,7 +78,9 @@ public class GameData : MonoBehaviour
                 }
                 heartrateBaseline = (int) Math.Floor(i / totalValues);
                 Debug.Log($"Got {heartrateBaseline} as baseline");
+                _measuringBaseline = false;
             }
+
         }
     }
 
@@ -69,5 +88,12 @@ public class GameData : MonoBehaviour
     {
         Neutral = 0,
         Fear = 1
+    }
+
+    public enum HeartState
+    {
+        Regular = 0,
+        Heightened = 1,
+        Dead = 2
     }
 }

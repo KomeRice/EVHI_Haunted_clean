@@ -6,7 +6,7 @@ using Random = System.Random;
 
 public class SuperDoorSlamEvent : SuperEvent
 {
-    //TODO: Readd this event on each new room entry
+    //TODO: Read this event on each new room entry
     
     protected override void TriggerClass(EventClass c)
     {
@@ -23,6 +23,10 @@ public class SuperDoorSlamEvent : SuperEvent
         }
 
         Properties.EventTriggerAmount -= 1;
+        if (Properties.EventTriggerAmount < 1)
+        {
+            Destroy(this);
+        }
     }
 
     protected override EventClass PickClass()
@@ -32,9 +36,13 @@ public class SuperDoorSlamEvent : SuperEvent
             EventClass.Ambient,
             EventClass.Regular
         };
+        
         var rng = new Random();
-        var choice = rng.Next(classes.Count);
-        return classes[choice];
+        var choice = rng.NextDouble();
+
+        if (choice < 0.7)
+            return EventClass.Ambient;
+        return EventClass.Regular;
     }
 
     protected override void InitEvent()

@@ -15,7 +15,6 @@ public class PianoExplode : MonoBehaviour
     void Start()
     {
         _pianoAudio = GetComponent<AudioSource>();
-        _pianoAudio.loop = true;
         _pianoAudio.Play();
     }
 

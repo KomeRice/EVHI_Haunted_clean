@@ -146,6 +146,8 @@ MonoBehaviour:
   eligibleNextRooms:
   - {fileID: 314291302578219400, guid: 6f9dc6ff5249c4a49be6900d3ff3c367, type: 3}
   - {fileID: 3992791528046188419, guid: 84e06bc58ee85e243ab73b48dd869e34, type: 3}
+  - {fileID: 3992791528046188419, guid: 87f97e6e0a2be490fa78f9ddbebf37ba, type: 3}
+  spookiness: 0
   doorIn: {fileID: 7666501759631879975}
   doorInFilled: 0
   doorOut: {fileID: 2769028806405779609}

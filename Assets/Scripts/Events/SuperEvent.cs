@@ -5,14 +5,6 @@ using UnityEngine;
 
 public abstract class SuperEvent : GameEvent
 {
-    protected GameData GameData;
-
-    private void Start()
-    {
-		InitEvent();
-        GameData = GameObject.Find("GameManager").GetComponent<GameData>();
-    }
-    
     public override void Trigger()
     {
         TriggerClass(PickClass());

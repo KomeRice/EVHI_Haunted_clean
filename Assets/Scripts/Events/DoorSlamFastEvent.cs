@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = System.Random;
 
 public class DoorSlamFastEvent: GameEvent
 {
@@ -18,9 +20,13 @@ public class DoorSlamFastEvent: GameEvent
 
 	public override bool CheckPrecondition()
 	{
+		var rng = new Random();
+		if (rng.NextDouble() < 0.5)
+			return false;
+		
 		return _targetDoor != null && Properties.EventTriggerAmount > 0 && !_targetDoor.isClosed &&
 		       Vector3.Distance(_player.transform.position, _targetDoor.transform.position) >= 5 &&
-		       !_targetDoor.GetComponent<Renderer>().isVisible;
+		       !_targetDoor.GetComponent<Renderer>().isVisible && GameData.heartState >= GameData.HeartState.Heightened;
 	}
 
 	public override void Trigger()
@@ -28,5 +34,6 @@ public class DoorSlamFastEvent: GameEvent
         StartCoroutine(_targetDoor.FastClose());
 		_targetDoor.SetInteractable(false);
 		Properties.EventTriggerAmount -= 1;
+		Destroy(this);
 	}
 }

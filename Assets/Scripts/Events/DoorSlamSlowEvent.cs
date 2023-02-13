@@ -18,6 +18,10 @@ public class DoorSlamSlowEvent : GameEvent
 
     public override bool CheckPrecondition()
     {
+		var rng = new System.Random();
+		if (rng.NextDouble() < 0.5)
+			return false;
+        
         return _targetDoor != null && Properties.EventTriggerAmount > 0 && !_targetDoor.isClosed && 
                Vector3.Distance(_player.transform.position, _targetDoor.transform.position) >= 5 && 
                !_targetDoor.GetComponent<Renderer>().isVisible;
@@ -28,5 +32,6 @@ public class DoorSlamSlowEvent : GameEvent
         StartCoroutine(_targetDoor.SlowClose());
         _targetDoor.SetInteractable(false);
         Properties.EventTriggerAmount -= 1;
+		Destroy(this);
     }
 }

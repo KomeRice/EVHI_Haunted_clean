@@ -766,6 +766,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eligibleNextRooms:
   - {fileID: 6056869586773400138, guid: a6d5fc7e42a33cd48823e53378bf2f4d, type: 3}
+  - {fileID: 2720613627086042409, guid: 8850ef5d8ceeab741a7145cbd7718740, type: 3}
+  spookiness: 0
   doorIn: {fileID: 8988433768773527842}
   doorInFilled: 0
   doorOut: {fileID: 4441514130589913605}
