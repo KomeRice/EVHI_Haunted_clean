@@ -19,7 +19,11 @@ public class FaceInfo : MonoBehaviour
 
     private double[] model = new double[35];
 
+    private double constant;
+
     public Text outPutMsg;
+
+    private DateTime lastTime;
     
     // Start is called before the first frame update
     void Start()
@@ -29,6 +33,11 @@ public class FaceInfo : MonoBehaviour
         var m = f.ReadLine().Split(",");
         model = m.Select(d => double.Parse(d, CultureInfo.InvariantCulture)).ToArray();
 
+        var c = f.ReadLine();
+        constant = double.Parse(c, CultureInfo.InvariantCulture);
+        
+        lastTime = DateTime.Now;
+        
         //seeting up the file read
         var info = new DirectoryInfo(folderPath);
         var fileinfo = info.GetFiles();
@@ -48,8 +57,14 @@ public class FaceInfo : MonoBehaviour
     private void Update()
     {
         var y = 0;
+        var timeDiff = DateTime.Now - lastTime;
+        if (timeDiff.TotalMilliseconds < 100)
+        {
+            return;
+        }
         try
         {
+            lastTime = DateTime.Now;
             string[] lines = _reader.ReadToEnd().Split(new string[] {Environment.NewLine}, StringSplitOptions.None);
             foreach (var t in lines)
             {
@@ -72,7 +87,7 @@ public class FaceInfo : MonoBehaviour
             // ignored
         }
 
-        outPutMsg.text = y > 0 ? "fear" : "neutral";
+        outPutMsg.text = y > 0 ? "Fear" : "Neutral";
     }
 
     private void OnApplicationQuit()
@@ -86,7 +101,7 @@ public class FaceInfo : MonoBehaviour
         {
             y += X[i] * model[i];
         }
-        return y>0? 1 : -1;
+        return (y+constant)>0? 1 : -1;
     }
     
 }
