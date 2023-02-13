@@ -14,6 +14,10 @@ public class GameData : MonoBehaviour
     public bool exitedCurrentRoom = true;
     public float measureTime = 10f;
     private DateTime _startMeasure;
+    public bool playedCritRecently = false;
+    public DateTime CritPlayedTime;
+    public GameObject lossScreen;
+    public AudioClip scarySound;
     
     public int heartrate;
     [NonSerialized] 
@@ -30,6 +34,11 @@ public class GameData : MonoBehaviour
     {
         heartrate = heartListener.heartrate;
         face = faceListener.outPutMsg.text == "Fear" ? FaceState.Fear : FaceState.Neutral;
+
+        if ((playedCritRecently && (DateTime.Now - CritPlayedTime).Seconds < 3) || Input.GetKeyDown(KeyCode.J) && face == FaceState.Fear)
+        {
+            lossScreen.SetActive(true);
+        }
 
         if (heartrateBaseline != -1 && !_measuringBaseline)
         {
@@ -82,6 +91,11 @@ public class GameData : MonoBehaviour
             }
 
         }
+    }
+
+    public void ShowLossScreen()
+    {
+        
     }
 
     public enum FaceState

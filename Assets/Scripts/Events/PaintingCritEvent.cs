@@ -21,6 +21,11 @@ public class PaintingCritEvent : GameEvent
 
     public override void Trigger()
     {
+        var go = GameObject.FindWithTag("Player");
+        var a = go.GetComponent<AudioSource>();
+        a.clip = GameData.scarySound;
+        a.Play();
+        
         Properties.EventTriggerAmount -= 1;
     }
 

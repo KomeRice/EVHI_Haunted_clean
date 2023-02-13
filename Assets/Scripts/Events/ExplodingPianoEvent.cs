@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,5 +26,7 @@ public class ExplodingPianoEvent : GameEvent
     public override void Trigger()
     {
         EventObjects["props_148"].GetComponent<PianoExplode>().ExplodePiano();
+        GameData.CritPlayedTime = DateTime.Now;
+        GameData.playedCritRecently = true;
     }
 }
