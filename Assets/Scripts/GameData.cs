@@ -29,7 +29,7 @@ public class GameData : MonoBehaviour
         heartrate = heartListener.heartrate;
         face = faceListener.outPutMsg.text == "Fear" ? FaceState.Fear : FaceState.Neutral;
 
-        if (heartrate != 0 && heartrateBaseline == -1)
+        if (heartrate != 0 && heartrateBaseline == -1 && !_measuringBaseline)
         {
             Debug.Log("Starting measure");
             _measuringBaseline = true;
