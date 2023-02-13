@@ -72,7 +72,7 @@ public class FaceInfo : MonoBehaviour
             // ignored
         }
 
-        outPutMsg.text = y > 0 ? "fear" : "neutral";
+        outPutMsg.text = y > 0 ? "Fear" : "Neutral";
     }
 
     private void OnApplicationQuit()

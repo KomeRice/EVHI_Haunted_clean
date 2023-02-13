@@ -15,7 +15,8 @@ public class CaptorInfo : MonoBehaviour
     [System.NonSerialized]
     public List<string> domains = new List<string>() { "BTH" };
     
-    private int heartrate;
+    [NonSerialized]
+    public int heartrate;
     // Start is called before the first frame update
     void Start()
     {// Initialise object
