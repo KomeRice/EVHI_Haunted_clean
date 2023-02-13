@@ -39,7 +39,7 @@ public class GameData : MonoBehaviour
 
         if (_measuringBaseline)
         {
-            if (!_measures.ContainsKey(heartrate))
+            if (_measures.ContainsKey(heartrate))
                 _measures[heartrate] += 1;
             else
             {
@@ -55,7 +55,7 @@ public class GameData : MonoBehaviour
                 var totalValues = 0f;
                 foreach (var key in _measures.Keys)
                 {
-                    if(key < 40 || key > 150)
+                    if(key is < 40 or > 150)
                         continue;
                     i += _measures[key] * key;
                     totalValues += _measures[key];
