@@ -35,10 +35,14 @@ public class GameData : MonoBehaviour
         heartrate = heartListener.heartrate;
         face = faceListener.outPutMsg.text == "Fear" ? FaceState.Fear : FaceState.Neutral;
 
-        if ((playedCritRecently && (DateTime.Now - CritPlayedTime).Seconds < 3) || Input.GetKeyDown(KeyCode.J) && face == FaceState.Fear)
+        if ((playedCritRecently && (DateTime.Now - CritPlayedTime).Seconds < 3) && face == FaceState.Fear)
         {
+            Debug.Log("Death");
             lossScreen.SetActive(true);
         }
+        
+        if(Input.GetKeyDown(KeyCode.J))
+            lossScreen.SetActive(true);
 
         if (heartrateBaseline != -1 && !_measuringBaseline)
         {
