@@ -13,16 +13,16 @@ public class GameData : MonoBehaviour
     public bool eventListRefresh = false;
     public bool exitedCurrentRoom = true;
     public float measureTime = 10f;
-    private DateTime startMeasure;
+    private DateTime _startMeasure;
     
     [NonSerialized] 
     public int heartrate;
     [NonSerialized] 
     public FaceState face;
 
-    private bool measuringBaseline = false;
+    private bool _measuringBaseline = false;
     public int heartrateBaseline = -1;
-    private Dictionary<int, int> _measures;
+    private readonly Dictionary<int, int> _measures = new Dictionary<int, int>();
 
     // Update is called once per frame
     void Update()
@@ -33,11 +33,11 @@ public class GameData : MonoBehaviour
         if (heartrate != 0 && heartrateBaseline == -1)
         {
             Debug.Log("Starting measure");
-            measuringBaseline = true;
-            startMeasure = DateTime.Now;
+            _measuringBaseline = true;
+            _startMeasure = DateTime.Now;
         }
 
-        if (measuringBaseline)
+        if (_measuringBaseline)
         {
             if (!_measures.ContainsKey(heartrate))
                 _measures[heartrate] += 1;
@@ -46,11 +46,11 @@ public class GameData : MonoBehaviour
                 _measures[heartrate] = 1;
             }
 
-            var time = DateTime.Now - startMeasure;
+            var time = DateTime.Now - _startMeasure;
 
             if (time.TotalSeconds > measureTime)
             {
-                measuringBaseline = false;
+                _measuringBaseline = false;
                 var i = 0f;
                 var totalValues = 0f;
                 foreach (var key in _measures.Keys)
