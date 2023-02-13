@@ -6,6 +6,7 @@ using UnityEngine.Serialization;
 public class BaseRoomBehaviour : MonoBehaviour
 {
     public List<GameObject> eligibleNextRooms = new List<GameObject>();
+    public Spookiness spookiness = Spookiness.Normal;
     
     [FormerlySerializedAs("door1")] public GameObject doorIn;
     public bool doorInFilled;
@@ -30,5 +31,12 @@ public class BaseRoomBehaviour : MonoBehaviour
         d1.doorOrientation = (DoorBehavior.Orientation) (((int) d1.doorOrientation + (int) orientation) % 360);
         d2.doorOrientation = (DoorBehavior.Orientation) (((int) d2.doorOrientation + (int) orientation) % 360);
         transform.Rotate(new Vector3(0f, (float) orientation, 0f), Space.World);
+    }
+    
+    public enum Spookiness
+    {
+        Normal = 0,
+        Spooky = 1,
+        Terror = 2
     }
 }

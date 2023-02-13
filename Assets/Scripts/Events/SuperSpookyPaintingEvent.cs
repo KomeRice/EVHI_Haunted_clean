@@ -9,22 +9,29 @@ public class SuperSpookyPaintingEvent : SuperEvent
     public Material spookyPainting;
     public Material regularPainting;
     public Material critPainting;
-    
-    protected override void InitEvent()
+
+    private bool _paintingSeen = false;
+
+    private void Update()
     {
-        Properties = new EventProperties("SuperSpookyPaintingEvent", EventClass.Super, new List<string>() { "Painting" }, 10);
-        EventObjects = CheckForObjects();
+        if (_paintingSeen)
+            return;
+        if (EventObjects["Painting"].transform.GetChild(1).GetComponent<Renderer>().isVisible)
+        {
+            Debug.Log("Painting seen");
+            _paintingSeen = true;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    protected override void InitEvent()
     {
-        
+        Properties = new EventProperties("SuperSpookyPaintingEvent", EventClass.Super, new List<string>() { "Painting" }, 1);
+        EventObjects = CheckForObjects();
     }
 
     public override bool CheckPrecondition()
     {
-        return EventObjects != null && Properties.EventTriggerAmount > 0;
+        return _paintingSeen && EventObjects != null && Properties.EventTriggerAmount > 0 && !EventObjects["Painting"].transform.GetChild(0).GetChild(0).GetComponent<Renderer>().isVisible;
     }
 
     protected override void TriggerClass(EventClass c)

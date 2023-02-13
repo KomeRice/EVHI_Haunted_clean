@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ public class LevelGenerator : MonoBehaviour
 {
     private GameObject _environment;
     private GameData _gameData;
+    private GameObject _player;
     private Random _rng;
 
     // Start is called before the first frame update
@@ -15,6 +17,7 @@ public class LevelGenerator : MonoBehaviour
     {
         _environment = GameObject.Find("Environment");
         _gameData = GetComponent<GameData>();
+        _player = GameObject.FindWithTag("Player");
         _rng = new Random();
     }
 
@@ -22,12 +25,91 @@ public class LevelGenerator : MonoBehaviour
     void Update()
     {
         var curRoom = _gameData.currentRoom.GetComponent<BaseRoomBehaviour>();
+        var doorExit = _gameData.currentRoom.GetComponent<BaseRoomBehaviour>().doorOut.transform.position;
         // TODO: Prevent rooms from generating in one another
+
+        if (Vector3.Distance(doorExit, _player.transform.position) < 4 && !curRoom.doorOutFilled)
+        {
+            if(_gameData.heartrateBaseline > 0)
+                GenerateSpookyLevel(curRoom);
+            else
+            {
+                RandomGenerateLevel(curRoom);
+            }
+        }
         
         if (Input.GetKeyDown(KeyCode.P))
         {
             RandomGenerateLevel(curRoom);
         }
+    }
+
+    private void GenerateSpookyLevel(BaseRoomBehaviour rootRoom)
+    {
+        if (rootRoom.eligibleNextRooms.Count == 0)
+        {
+            Debug.Log("No eligible next room found");
+            return;
+        }
+
+        var d = new Dictionary<BaseRoomBehaviour.Spookiness, List<GameObject>>
+        {
+            [BaseRoomBehaviour.Spookiness.Normal] = new List<GameObject>(),
+            [BaseRoomBehaviour.Spookiness.Spooky] = new List<GameObject>(),
+            [BaseRoomBehaviour.Spookiness.Terror] = new List<GameObject>()
+        };
+        foreach (var room in rootRoom.eligibleNextRooms)
+        {
+            var rb = room.GetComponent<BaseRoomBehaviour>();
+            d[rb.spookiness].Add(room);
+        }
+
+        var prob = new List<double>();
+        switch (_gameData.heartState)
+        {
+            case GameData.HeartState.Regular:
+                prob.Add(0.33);
+                prob.Add(0.66);
+                break;
+            case GameData.HeartState.Heightened:
+                prob.Add(0.2);
+                prob.Add(0.6);
+                break;
+            case GameData.HeartState.Dead:
+                prob.Add(0.01);
+                prob.Add(0.20);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
+        var pickedSpooky = PickSpooky(prob);
+        if (pickedSpooky == BaseRoomBehaviour.Spookiness.Terror && d[pickedSpooky].Count == 0)
+            pickedSpooky = BaseRoomBehaviour.Spookiness.Spooky;
+        if (pickedSpooky == BaseRoomBehaviour.Spookiness.Spooky && d[pickedSpooky].Count == 0)
+            pickedSpooky = BaseRoomBehaviour.Spookiness.Normal;
+        if (d[pickedSpooky].Count == 0)
+        {
+            RandomGenerateLevel(rootRoom);
+            return;
+        }
+
+        var choiceList = d[pickedSpooky];
+        var rng = new Random();
+        var r = rng.Next(choiceList.Count);
+        
+        GenerateLevel(rootRoom, choiceList[r]);
+    }
+
+    private BaseRoomBehaviour.Spookiness PickSpooky(List<double> prob)
+    {
+        var rng = new Random();
+        var r = rng.NextDouble();
+        if (r < prob[0])
+            return BaseRoomBehaviour.Spookiness.Normal;
+        if (r < prob[1])
+            return BaseRoomBehaviour.Spookiness.Spooky;
+        return BaseRoomBehaviour.Spookiness.Terror;
     }
 
     private void RandomGenerateLevel(BaseRoomBehaviour rootRoom)

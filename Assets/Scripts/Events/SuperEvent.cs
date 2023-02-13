@@ -5,18 +5,10 @@ using UnityEngine;
 
 public abstract class SuperEvent : GameEvent
 {
-    private GameData _gameData;
-
-    private void Start()
-    {
-		InitEvent();
-        _gameData = GameObject.Find("GameManager").GetComponent<GameData>();
-    }
-    
     public override void Trigger()
     {
         TriggerClass(PickClass());
-        _gameData.eventListRefresh = true;
+        GameData.eventListRefresh = true;
     }
 
     /// <summary>

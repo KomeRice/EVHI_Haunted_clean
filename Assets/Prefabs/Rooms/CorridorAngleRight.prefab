@@ -1021,6 +1021,10 @@ MonoBehaviour:
   eligibleNextRooms:
   - {fileID: 3992791528046188419, guid: 84e06bc58ee85e243ab73b48dd869e34, type: 3}
   - {fileID: 6056869586773400138, guid: 5bb692224f6569e45acf71051fe58d7d, type: 3}
+  - {fileID: 314291302578219400, guid: 6f9dc6ff5249c4a49be6900d3ff3c367, type: 3}
+  - {fileID: 3992791528046188419, guid: 87f97e6e0a2be490fa78f9ddbebf37ba, type: 3}
+  - {fileID: 3992791528046188419, guid: 84e06bc58ee85e243ab73b48dd869e34, type: 3}
+  spookiness: 0
   doorIn: {fileID: 2655464756392256115}
   doorInFilled: 0
   doorOut: {fileID: 1008745443078650836}
@@ -1524,7 +1528,7 @@ PrefabInstance:
     - target: {fileID: 255988067924369427, guid: ea7524f93bdcc0d4b9bae2aea32f5ffb,
         type: 3}
       propertyPath: m_Name
-      value: DoorFrame
+      value: DoorFrameIn
       objectReference: {fileID: 0}
     - target: {fileID: 3588130152402894117, guid: ea7524f93bdcc0d4b9bae2aea32f5ffb,
         type: 3}
@@ -1660,7 +1664,7 @@ PrefabInstance:
     - target: {fileID: 255988067924369427, guid: ea7524f93bdcc0d4b9bae2aea32f5ffb,
         type: 3}
       propertyPath: m_Name
-      value: DoorFrame
+      value: DoorFrameOut
       objectReference: {fileID: 0}
     - target: {fileID: 3588130152402894117, guid: ea7524f93bdcc0d4b9bae2aea32f5ffb,
         type: 3}

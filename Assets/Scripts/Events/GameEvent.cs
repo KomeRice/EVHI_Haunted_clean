@@ -6,12 +6,14 @@ using UnityEngine;
 
 public abstract class GameEvent : MonoBehaviour
 {
+    protected GameData GameData;
 	public EventProperties Properties;
 	protected Dictionary<string, GameObject> EventObjects;
 
 	private void Start()
 	{
 		InitEvent();
+        GameData = GameObject.Find("GameManager").GetComponent<GameData>();
 	}
 
 	/// <summary>

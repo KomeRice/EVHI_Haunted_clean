@@ -503,9 +503,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a3e2e3e2421f4905afa8e828b334419, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  door1: {fileID: 649034638572140008}
-  door2: {fileID: 5197132953224449743}
-  room: {fileID: 3691658414877764757}
+  eligibleNextRooms: []
+  doorIn: {fileID: 649034638572140008}
+  doorInFilled: 0
+  doorOut: {fileID: 5197132953224449743}
+  doorOutFilled: 0
 --- !u!1 &3797471227068346004
 GameObject:
   m_ObjectHideFlags: 0
@@ -1197,7 +1199,7 @@ PrefabInstance:
     - target: {fileID: 255988067924369427, guid: ea7524f93bdcc0d4b9bae2aea32f5ffb,
         type: 3}
       propertyPath: m_Name
-      value: Door
+      value: DoorFrameOut
       objectReference: {fileID: 0}
     - target: {fileID: 3588130152402894117, guid: ea7524f93bdcc0d4b9bae2aea32f5ffb,
         type: 3}
@@ -1333,7 +1335,7 @@ PrefabInstance:
     - target: {fileID: 255988067924369427, guid: ea7524f93bdcc0d4b9bae2aea32f5ffb,
         type: 3}
       propertyPath: m_Name
-      value: Door
+      value: DoorFrameIn
       objectReference: {fileID: 0}
     - target: {fileID: 3588130152402894117, guid: ea7524f93bdcc0d4b9bae2aea32f5ffb,
         type: 3}

@@ -146,6 +146,8 @@ MonoBehaviour:
   eligibleNextRooms:
   - {fileID: 314291302578219400, guid: 6f9dc6ff5249c4a49be6900d3ff3c367, type: 3}
   - {fileID: 3992791528046188419, guid: 84e06bc58ee85e243ab73b48dd869e34, type: 3}
+  - {fileID: 3992791528046188419, guid: 87f97e6e0a2be490fa78f9ddbebf37ba, type: 3}
+  spookiness: 0
   doorIn: {fileID: 7666501759631879975}
   doorInFilled: 0
   doorOut: {fileID: 2769028806405779609}
@@ -275,7 +277,7 @@ Transform:
   m_GameObject: {fileID: 3737317973086305360}
   m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
   m_LocalPosition: {x: 0, y: 3.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1.4}
+  m_LocalScale: {x: 0.535, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9210829831809344550}
@@ -1201,7 +1203,7 @@ PrefabInstance:
     - target: {fileID: 255988067924369427, guid: ea7524f93bdcc0d4b9bae2aea32f5ffb,
         type: 3}
       propertyPath: m_Name
-      value: DoorFrame
+      value: DoorFrameIn
       objectReference: {fileID: 0}
     - target: {fileID: 3588130152402894117, guid: ea7524f93bdcc0d4b9bae2aea32f5ffb,
         type: 3}
@@ -1337,7 +1339,7 @@ PrefabInstance:
     - target: {fileID: 255988067924369427, guid: ea7524f93bdcc0d4b9bae2aea32f5ffb,
         type: 3}
       propertyPath: m_Name
-      value: DoorFrame
+      value: DoorFrameOut
       objectReference: {fileID: 0}
     - target: {fileID: 3588130152402894117, guid: ea7524f93bdcc0d4b9bae2aea32f5ffb,
         type: 3}
