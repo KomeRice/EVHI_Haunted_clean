@@ -7,7 +7,6 @@ public class DoorSlamFastEvent: GameEvent
 {
 	private DoorBehavior _targetDoor;
 	private GameObject _player;
-
     
 	protected override void InitEvent()
 	{
@@ -19,7 +18,9 @@ public class DoorSlamFastEvent: GameEvent
 
 	public override bool CheckPrecondition()
 	{
-		return _targetDoor != null && Properties.EventTriggerAmount > 0 && !_targetDoor.isClosed && Vector3.Distance(_player.transform.position, _targetDoor.transform.position) >= 5;
+		return _targetDoor != null && Properties.EventTriggerAmount > 0 && !_targetDoor.isClosed &&
+		       Vector3.Distance(_player.transform.position, _targetDoor.transform.position) >= 5 &&
+		       !_targetDoor.GetComponent<Renderer>().isVisible;
 	}
 
 	public override void Trigger()
