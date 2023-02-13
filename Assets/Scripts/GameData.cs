@@ -15,7 +15,6 @@ public class GameData : MonoBehaviour
     public float measureTime = 10f;
     private DateTime _startMeasure;
     
-    [NonSerialized] 
     public int heartrate;
     [NonSerialized] 
     public FaceState face;
