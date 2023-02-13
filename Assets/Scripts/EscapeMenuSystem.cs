@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,11 @@ public class EscapeMenuSystem : MonoBehaviour
     public GameObject player;
 
     private bool _menuActive = false;
+
+    private void Start()
+    {
+        player.GetComponent<PlayerControlUtils>().SetInputActive(true);
+    }
 
     // Update is called once per frame
     void Update()

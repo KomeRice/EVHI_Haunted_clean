@@ -23,7 +23,7 @@ public class DoorSlamSlowEvent : GameEvent
 
     public override void Trigger()
     {
-        StartCoroutine(_targetDoor.CloseDoor(1f));
+        StartCoroutine(_targetDoor.SlowClose());
         _targetDoor.SetInteractable(false);
         Properties.EventTriggerAmount -= 1;
     }

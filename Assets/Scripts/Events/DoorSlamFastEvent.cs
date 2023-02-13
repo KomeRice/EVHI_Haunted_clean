@@ -24,7 +24,7 @@ public class DoorSlamFastEvent: GameEvent
 
 	public override void Trigger()
 	{
-		StartCoroutine(_targetDoor.CloseDoor(3f));
+        StartCoroutine(_targetDoor.FastClose());
 		_targetDoor.SetInteractable(false);
 		Properties.EventTriggerAmount -= 1;
 	}

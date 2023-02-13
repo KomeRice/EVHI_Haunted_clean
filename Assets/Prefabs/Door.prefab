@@ -582,6 +582,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doorOrientation: 0
+  interactable: 1
+  doorCloseSlow: {fileID: 8300000, guid: 843f9cc0262cc4bd59d73b3fc2a4ca61, type: 3}
+  doorCloseFinal: {fileID: 8300000, guid: 3face619ddd834675a4f336cc21d33e0, type: 3}
+  doorCloseFast: {fileID: 0}
+  doorCloseFastSlam: {fileID: 8300000, guid: 1049e29358b654af7b76c3a06616616f, type: 3}
+  doorOpenCreak: {fileID: 8300000, guid: 0c57f40ded10db746ae1f7b34b13461b, type: 3}
+  isClosed: 1
 --- !u!82 &3152517430364833670
 AudioSource:
   m_ObjectHideFlags: 0

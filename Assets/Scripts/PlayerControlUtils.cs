@@ -19,9 +19,9 @@ public class PlayerControlUtils : MonoBehaviour
         _cameraControl = GetComponent<StarterAssetsInputs>();
     }
 
-    void SetInputActive(bool newState)
+    public void SetInputActive(bool newState)
     {
-        _isActive = !_isActive;
+        _isActive = newState;
         Cursor.visible = !newState;
         Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
         _cameraControl.look = Vector2.zero;

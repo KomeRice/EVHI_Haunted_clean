@@ -12,6 +12,11 @@ public class DoorBehavior : MonoBehaviour
     private float _curAngle = 0.0f;
     private float _maxInteractionDistance = 3.0f;
     public bool interactable = true;
+    public AudioClip doorCloseSlow;
+    public AudioClip doorCloseFinal;
+    public AudioClip doorCloseFast;
+    public AudioClip doorCloseFastSlam;
+    public AudioClip doorOpenCreak;
 
     private bool _isOpening = false;
     private bool _isOpen = false;
@@ -67,12 +72,38 @@ public class DoorBehavior : MonoBehaviour
         {
             isClosed = false;
             _isOpening = true;
+            Debug.Log("Play audio");
+            _audioSource.clip = doorOpenCreak;
             _audioSource.Play();
         }
     }
 
+    public IEnumerator SlowClose()
+    {
+        _audioSource.clip = doorCloseSlow;
+        _audioSource.Play();
+        yield return StartCoroutine(CloseDoorInTime(5f));
+        _audioSource.clip = doorCloseFinal; 
+        _audioSource.Play();
+    }
+
+    public IEnumerator FastClose()
+    {
+        yield return StartCoroutine(CloseDoorInTime(0.2f));
+        _audioSource.clip = doorCloseFastSlam; 
+        _audioSource.Play();
+    }
+
+    private IEnumerator CloseDoorInTime(float duration)
+    {
+        var closeTicks = duration / Time.fixedDeltaTime;
+        Debug.Log($"Close door in {closeTicks}, {Time.fixedDeltaTime}");
+        yield return StartCoroutine(CloseDoor(-_curAngle / closeTicks));
+    }
+
     public IEnumerator CloseDoor(float closeSpeed)
     {
+        Debug.Log($"Closing door at {closeSpeed} speed");
         _isOpen = false;
         _isClosing = true;
         while (!isClosed)
