@@ -1,13 +1,14 @@
 {
   "scopedRegistries": [
     {
-	  "name": "NatML",
-	  "url": "https://registry.npmjs.com",
-	  "scopes": ["ai.natml"]
-	}
+      "name": "NatML",
+      "url": "https://registry.npmjs.com",
+      "scopes": [
+        "ai.natml"
+      ]
+    }
   ],
   "dependencies": {
-    "ai.natml.natml": "1.1.0",
     "com.unity.cinemachine": "2.8.9",
     "com.unity.collab-proxy": "1.17.7",
     "com.unity.feature.development": "1.0.1",

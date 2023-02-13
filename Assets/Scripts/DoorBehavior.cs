@@ -103,7 +103,8 @@ public class DoorBehavior : MonoBehaviour
 
     private bool PlayerInRange()
     {
-        return Vector3.Distance(transform.position, _player.transform.position) < _maxInteractionDistance;
+        return Vector3.Distance(transform.position, _player.transform.position) < _maxInteractionDistance &&
+               _player.GetComponent<PlayerControlUtils>().canInteract;
     }
 
     public void SetInteractable(bool newState)
