@@ -47,22 +47,29 @@ public class FaceInfo : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        string[] lines = _reader.ReadToEnd().Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
         var y = 0;
-        foreach (var t in lines)
+        try
         {
-            if (t == "" || t.StartsWith("f")) continue;
-            string[] data = t.Split(",");
-            var x = data.Skip(data.Length - 35).Take(35).ToArray();
-            try
+            string[] lines = _reader.ReadToEnd().Split(new string[] {Environment.NewLine}, StringSplitOptions.None);
+            foreach (var t in lines)
             {
-                var X = x.Select(d => double.Parse(d, CultureInfo.InvariantCulture)).ToArray();
-                y += Predict(X);
+                if (t == "" || t.StartsWith("f")) continue;
+                string[] data = t.Split(",");
+                var x = data.Skip(data.Length - 35).Take(35).ToArray();
+                try
+                {
+                    var X = x.Select(d => double.Parse(d, CultureInfo.InvariantCulture)).ToArray();
+                    y += Predict(X);
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
             }
-            catch (Exception)
-            {
-                // ignored
-            }
+        }
+        catch (Exception e)
+        {
+            // ignored
         }
 
         outPutMsg.text = y > 0 ? "fear" : "neutral";
