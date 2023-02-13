@@ -8,6 +8,7 @@ public class LevelGenerator : MonoBehaviour
 {
     private GameObject _environment;
     private GameData _gameData;
+    private GameObject _player;
     private Random _rng;
 
     // Start is called before the first frame update
@@ -15,6 +16,7 @@ public class LevelGenerator : MonoBehaviour
     {
         _environment = GameObject.Find("Environment");
         _gameData = GetComponent<GameData>();
+        _player = GameObject.FindWithTag("Player");
         _rng = new Random();
     }
 
@@ -22,6 +24,7 @@ public class LevelGenerator : MonoBehaviour
     void Update()
     {
         var curRoom = _gameData.currentRoom.GetComponent<BaseRoomBehaviour>();
+        var doorExit = _gameData.currentRoom.GetComponent<BaseRoomBehaviour>().doorOut.transform.position;
         // TODO: Prevent rooms from generating in one another
         
         if (Input.GetKeyDown(KeyCode.P))
