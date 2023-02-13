@@ -5,6 +5,7 @@ using UnityEngine;
 public class PaintingRegularEvent : GameEvent 
 {
     public Material newPainting;
+    private bool _setPainting = false;
 
     protected override void InitEvent()
     {
@@ -15,17 +16,21 @@ public class PaintingRegularEvent : GameEvent
 
     public override bool CheckPrecondition()
     {
-        return true;
+        return Properties.EventTriggerAmount > 0 && EventObjects["Painting"].transform.GetChild(1).GetComponent<Renderer>().isVisible;
     }
 
     public override void Trigger()
     {
-        EventObjects["Painting"].transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = newPainting;
+        Properties.EventTriggerAmount -= 1;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (newPainting != null && !_setPainting)
+        {
+            EventObjects["Painting"].transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = newPainting;
+            _setPainting = true;
+        }
     }
 }

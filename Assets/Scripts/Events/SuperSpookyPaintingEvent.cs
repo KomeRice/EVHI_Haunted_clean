@@ -12,13 +12,13 @@ public class SuperSpookyPaintingEvent : SuperEvent
     
     protected override void InitEvent()
     {
-        Properties = new EventProperties("SuperSpookyPaintingEvent", EventClass.Super, new List<string>() { "Painting" }, 10);
+        Properties = new EventProperties("SuperSpookyPaintingEvent", EventClass.Super, new List<string>() { "Painting" }, 1);
         EventObjects = CheckForObjects();
     }
 
     public override bool CheckPrecondition()
     {
-        return EventObjects != null && Properties.EventTriggerAmount > 0;
+        return EventObjects != null && Properties.EventTriggerAmount > 0 && !EventObjects["Painting"].transform.GetChild(0).GetChild(0).GetComponent<Renderer>().isVisible;
     }
 
     protected override void TriggerClass(EventClass c)
