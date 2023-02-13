@@ -18,7 +18,7 @@ public class RandomSoundEvent : GameEvent
     public override bool CheckPrecondition()
     {
 		var rng = new System.Random();
-		if (rng.NextDouble() < 0.005)
+		if (rng.NextDouble() < 0.9)
 			return false;
         return !_playerAudio.isPlaying;
     }
